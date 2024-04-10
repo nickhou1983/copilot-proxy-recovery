@@ -6,6 +6,15 @@
 2. proxy-es.py 用于在mitmproxy中使用elasticsearch存储数据，可以通过此脚本对mitmproxy进行扩展；
 3. creds.txt 用于存储用户名和密码，用于mitmproxy的认证；
 
+## 资源配置
+
+| 服务器 | 规格 | 数量 | 用途 |
+| --- | --- | --- | --- |
+| mitmproxy | 4C16G | 1 | 部署mitmproxy
+| elasticsearch | 2C8G | 3 | 存储mitmproxy数据
+| kibana | 2C8G | 1 | 可视化mitmproxy数据
+
+
 ## 使用方法
 
 1. 在部署mitmproxy的服务器上安装 Docker，参考 [Docker 安装文档](https://docs.docker.com/get-docker/)
