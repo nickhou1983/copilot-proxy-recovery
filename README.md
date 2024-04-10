@@ -6,6 +6,11 @@
 2. proxy-es.py 用于在mitmproxy中使用elasticsearch存储数据，可以通过此脚本对mitmproxy进行扩展；
 3. creds.txt 用于存储用户名和密码，用于mitmproxy的认证；
 
+
+## 部署架构
+
+![Architecture](https://github.com/nickhou1983/mitmproxy-copilot/blob/main/image.png)
+
 ## 资源配置
 
 | 服务器 | 规格 | 数量 | 用途 |
