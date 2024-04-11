@@ -28,7 +28,7 @@ yum install -y yum-utils
 yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 yum install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 ```
-2. 通过 Dockerfile 构建镜像
+2. 通过 Dockerfile 构建镜像，注意一定要在当前目录下执行
 ```
 docker build . -t mitmproxy-copilot:v1
 ```
