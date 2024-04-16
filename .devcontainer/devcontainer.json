@@ -1,8 +1,8 @@
 
 {
    "hostRequirements": {
-   "cpus": 2,
-   "memory": "4gb",
+   "cpus": 4,
+   "memory": "8gb",
    "storage": "32gb"
    },
   "image": "mcr.microsoft.com/devcontainers/universal:2",
