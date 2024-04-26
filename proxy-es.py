@@ -79,15 +79,23 @@ class AuthProxy:
             flow.response = http.Response.make(401)
         ctx.log.info("Proxy-Authorization: " + proxy_auth.strip())
         if proxy_auth.strip() == "" :
-            self.proxy_authorizations[(flow.client_conn.address[0])] = "daniel"
-            return
+            flow.response = http.Response.make(401)
+        #    self.proxy_authorizations[(flow.client_conn.address[0])] = "daniel"
+        #    return
         auth_type, auth_string = proxy_auth.split(" ", 1)
         auth_string = base64.b64decode(auth_string).decode("utf-8")
         username, password = auth_string.split(":")
         ctx.log.info("User: " + username + " Password: " + password)
         # 验证用户名和密码
-        if not (username in self.credentials and self.credentials[username]) == password:
-            ctx.log.info("UserPassword: " + self.credentials[username])
+        if username in self.credentials:
+            # If the username exists, check if the password is correct
+            if self.credentials[username] != password:
+                ctx.log.info("User: " + username + " attempted to log in with an incorrect password.")
+                flow.response = http.Response.make(401)
+                return
+        else:
+            # If the username does not exist, log the event and return a 401 response
+            ctx.log.info("Username: " + username + " does not exist.")
             flow.response = http.Response.make(401)
             return
         ctx.log.info("Authenticated: " + flow.client_conn.address[0])
