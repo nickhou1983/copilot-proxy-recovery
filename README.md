@@ -5,6 +5,7 @@
 1. Dockerfile 用于生成 mitmproxy-copilot 镜像；
 2. proxy-es.py 用于在mitmproxy中使用elasticsearch存储数据，可以通过此脚本对mitmproxy进行扩展；
 3. creds.txt 用于存储用户名和密码，用于mitmproxy的认证；
+4. 可以通过对proxy-es.py进行修改，实现更多的功能。
 
 
 ## 部署架构
