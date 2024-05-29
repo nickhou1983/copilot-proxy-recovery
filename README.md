@@ -47,8 +47,14 @@ docker build . -t mitmproxy-copilot:v1
 
 3. 运行容器
 ```
-docker run -d --net="host" mitmproxy-copilot:v1
+docker run -d --net="host" mitmproxy-copilot:v1 -v ./creds.txt:/app/creds.txt -v ./proxy-es.py:/app/proxy-es.py
 ```
+### 已知问题
+
+1. 密码为数字，或数字和字母组合，请不要包含特殊字符，否则可能会导致mitmproxy无法启动；
+
+### 代理高可用部署
+
 
 
 ### 客户端配置
