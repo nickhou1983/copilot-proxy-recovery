@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mitmproxy-deployment-ha
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mitmproxy-ha
+  template:
+    metadata:
+      labels:
+        app: mitmproxy-ha
+    spec:
+      containers:
+      - name: mitmproxy-ha
+        image: demoacrcn.azurecr.cn/mitmproxy:v25
+        volumeMounts:
+        - name: mitmproxy-volume
+          mountPath: /app
+      volumes:
+      - name: mitmproxy-volume
+        persistentVolumeClaim:
+          claimName: mitmproxy-pvc

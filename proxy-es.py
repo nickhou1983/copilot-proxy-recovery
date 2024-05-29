@@ -11,16 +11,16 @@ import functools
 # 通常仅需要修改这里的配置
 # 初始化Elasticsearch客户端，如果Elasticsearch需要身份验证，可以在这里设置用户名和密码
 
-ELASTICSEARCH_URL = "http://143.64.161.23:9200/"
-# ELASTICSEARCH_USERNAME = "admin"
-# ELASTICSEARCH_PASSWORD = "Jessie123!"
+ELASTICSEARCH_URL = "https://143.64.161.23:9200/"
+ELASTICSEARCH_USERNAME = "admin"
+ELASTICSEARCH_PASSWORD = "Jessie@Hunan.com3"
 
 es = Elasticsearch(
     [ELASTICSEARCH_URL],
 # ElasticSearch 不需要验证服务器证书   
     verify_certs=False,
 # ElasticSearch 不需要用户名和密码
-#   http_auth=(ELASTICSEARCH_USERNAME, ELASTICSEARCH_PASSWORD),
+    http_auth=(ELASTICSEARCH_USERNAME, ELASTICSEARCH_PASSWORD),
 )
 
 allowed_patterns = [
