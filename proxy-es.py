@@ -40,6 +40,7 @@ allowed_patterns = [
      "https://default.exp-tas.com/vscode/ab",
      "https://copilot-telemetry.githubusercontent.com/telemetry",
      "https://copilot-proxy.githubusercontent.com.*",
+     "https://*.githubcopilot.com/.*",
      "https://api.github.com/applications/[0-9a-fA-F]+/token",
      "https://api.githubcopilot.com/chat/completions.*",
      "https://api.github.com/.*"
