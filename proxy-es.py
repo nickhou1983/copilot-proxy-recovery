@@ -25,6 +25,8 @@ es = Elasticsearch(
 
 allowed_patterns = [
      # "https://.*",
+     "https://github.com/.*",
+     "https://api.githubcopilot.com/.*",
      "https://github.com/login.*",
      "https://vscode.dev/redirect.*",
      "https://github.com/settings/two_factor_checkup.*",
