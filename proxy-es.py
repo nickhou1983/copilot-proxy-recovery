@@ -7,6 +7,7 @@ import re
 import os
 import json
 import functools
+import redis
 
 # 通常仅需要修改这里的配置
 # 初始化Elasticsearch客户端，如果Elasticsearch需要身份验证，可以在这里设置用户名和密码
@@ -14,6 +15,9 @@ import functools
 ELASTICSEARCH_URL = "https://143.64.161.23:9200/"
 ELASTICSEARCH_USERNAME = "admin"
 ELASTICSEARCH_PASSWORD = "Jessie@Hunan.com3"
+REDIS_HOST="demoredis01.redis.cache.chinacloudapi.cn"
+REDIS_PORT=6379
+REDIS_PASSWORD="kDEImda3sCxMInwKfWyjhWyOWavDPKsbKAzCaCksrVI="
 
 es = Elasticsearch(
     [ELASTICSEARCH_URL],
@@ -62,24 +66,26 @@ def is_url_allowed(url: str) -> bool:
 class AuthProxy:
     def __init__(self):
         self.loop = asyncio.get_event_loop()
-        self.proxy_authorizations = {} 
-        self.credentials = self.load_credentials("creds.txt")
+        self.proxy_authorizations = {}
+        self.redis_client = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, password=REDIS_PASSWORD, decode_responses=True) 
+    #    self.credentials = self.load_credentials("creds.txt")
 
-    def load_credentials(self, file_path):
-        if not os.path.exists(file_path):
-            raise FileNotFoundError(f"Credentials file '{file_path}' not found")
-        creds = {}
-        with open(file_path, "r") as f:
-            for line in f:
-                username, password = line.strip().split(",")
-                creds[username] = password
-        return creds
+    # def load_credentials(self, file_path):
+    #    if not os.path.exists(file_path):
+    #        raise FileNotFoundError(f"Credentials file '{file_path}' not found")
+    #    creds = {}
+    #    with open(file_path, "r") as f:
+    #        for line in f:
+    #            username, password = line.strip().split(",")
+    #            creds[username] = password
+    #    return creds
 
     def http_connect(self, flow: http.HTTPFlow):
         proxy_auth = flow.request.headers.get("Proxy-Authorization", "")
         # 如果没有代理授权头，返回401
         if not proxy_auth:
             flow.response = http.Response.make(401)
+
         ctx.log.info("Proxy-Authorization: " + proxy_auth.strip())
         if proxy_auth.strip() == "" :
             flow.response = http.Response.make(401)
@@ -89,20 +95,37 @@ class AuthProxy:
         auth_string = base64.b64decode(auth_string).decode("utf-8")
         username, password = auth_string.split(":")
         ctx.log.info("User: " + username + " Password: " + password)
-        # 验证用户名和密码
-        if username in self.credentials:
-            # If the username exists, check if the password is correct
-            if self.credentials[username] != password:
-                ctx.log.info("User: " + username + " attempted to log in with an incorrect password.")
-                flow.response = http.Response.make(401)
-                return
-        else:
-            # If the username does not exist, log the event and return a 401 response
+
+        # 从Redis中校验用户名和密码
+        stored_password = self.redis_client.get(username)
+        print(stored_password)
+        if stored_password is None:
+            # 如果用户名不存在
             ctx.log.info("Username: " + username + " does not exist.")
             flow.response = http.Response.make(401)
-            return
-        ctx.log.info("Authenticated: " + flow.client_conn.address[0])
-        self.proxy_authorizations[(flow.client_conn.address[0])] = username
+        elif stored_password != password:
+            # 如果密码不正确
+            ctx.log.info("User: " + username + " attempted to log in with an incorrect password.")
+            flow.response = http.Response.make(401)
+        else:
+            # 认证成功
+            ctx.log.info("Authenticated: " + flow.client_conn.address[0])
+            self.proxy_authorizations[(flow.client_conn.address[0])] = username
+
+        # 验证用户名和密码
+        # if username in self.credentials:
+            # If the username exists, check if the password is correct
+        #    if self.credentials[username] != password:
+        #        ctx.log.info("User: " + username + " attempted to log in with an incorrect password.")
+        #        flow.response = http.Response.make(401)
+        #        return
+        #else:
+            # If the username does not exist, log the event and return a 401 response
+        #    ctx.log.info("Username: " + username + " does not exist.")
+        #    flow.response = http.Response.make(401)
+        #    return
+        # ctx.log.info("Authenticated: " + flow.client_conn.address[0])
+        # self.proxy_authorizations[(flow.client_conn.address[0])] = username
     
     
     def request(self, flow: http.HTTPFlow):

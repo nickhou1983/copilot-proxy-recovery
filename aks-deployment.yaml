@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: mitmproxy-deployment-ha
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: mitmproxy-ha
@@ -14,11 +14,11 @@ spec:
     spec:
       containers:
       - name: mitmproxy-ha
-        image: demoacrcn.azurecr.cn/mitmproxy:v25
+        image: demoacrcn.azurecr.cn/mitmproxy-redis:v1
         volumeMounts:
         - name: mitmproxy-volume
           mountPath: /app
       volumes:
       - name: mitmproxy-volume
         persistentVolumeClaim:
-          claimName: mitmproxy-pvc
+          claimName: mitmproxy-redis-pvc
