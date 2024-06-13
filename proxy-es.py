@@ -18,7 +18,7 @@ ELASTICSEARCH_PASSWORD = "Jessie@123"
 # 添加Redis连接
 REDIS_HOST="demoredis01.redis.cache.chinacloudapi.cn"
 REDIS_PORT=6379
-REDIS_PASSWORD=""
+REDIS_PASSWORD="kDEImda3sCxMInwKfWyjhWyOWavDPKsbKAzCaCksrVI="
 
 es = Elasticsearch(
     [ELASTICSEARCH_URL],
