@@ -14,11 +14,11 @@ import redis # 导入Redis
 
 ELASTICSEARCH_URL = "https://143.64.161.23:9200/"
 ELASTICSEARCH_USERNAME = "admin"
-ELASTICSEARCH_PASSWORD = "Jessie@123"
+ELASTICSEARCH_PASSWORD = "Your ES Password"
 # 添加Redis连接
-REDIS_HOST="demoredis01.redis.cache.chinacloudapi.cn"
+REDIS_HOST="Your Redis Host"
 REDIS_PORT=6379
-REDIS_PASSWORD="kDEImda3sCxMInwKfWyjhWyOWavDPKsbKAzCaCksrVI="
+REDIS_PASSWORD="Your Redis Password"
 
 es = Elasticsearch(
     [ELASTICSEARCH_URL],
